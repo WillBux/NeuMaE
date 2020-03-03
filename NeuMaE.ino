@@ -10,6 +10,10 @@
 // Create aREST instance
 aREST rest = aREST();
 
+bool blinkLed = false;
+bool isLedOn = false;
+unsigned long lastTime;
+
 // WiFi parameters
 const char* ssid = "GTother";
 const char* password = "GeorgeP@1927";
@@ -25,74 +29,96 @@ int ledOn(String command);
 int ledOff(String command);
 int motorOn(String command);
 int motorOff(String command);
+int battery(String command);
 
-void setup(void)
-{
-  // Start Serial
-  Serial.begin(115200);
+void setup(void) {
+    // Start Serial
+    Serial.begin(115200);
 
-  // Function to be exposed
-  rest.function("ledOn",ledOn);
-  rest.function("ledOff",ledOff);
-  rest.function("motorOn", motorOn);
-  rest.function("motorOff",motorOff);
-  
-  pinMode(LED, OUTPUT);
-  pinMode(MOTOR, OUTPUT);
+    // Function to be exposed
+    rest.function("ledOn",ledOn);
+    rest.function("ledOff",ledOff);
+    rest.function("motorOn", motorOn);
+    rest.function("motorOff", motorOff);
+    rest.function("battery", battery);
 
-  // Give name & ID to the device (ID should be 6 characters long)
-  rest.set_id("1");
-  rest.set_name("esp8266");
+    pinMode(LED, OUTPUT);
+    pinMode(MOTOR, OUTPUT);
+    pinMode(A0, INPUT);
 
-  // Connect to WiFi
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
+    // Give name & ID to the device (ID should be 6 characters long)
+    rest.set_id("1");
+    rest.set_name("esp8266");
 
-  // Start the server
-  server.begin();
-  Serial.println("Server started");
+    // Connect to WiFi
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("");
+    Serial.println("WiFi connected");
 
-  // Print the IP and MAC address
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-  Serial.print("MAC: ");
-  Serial.println(WiFi.macAddress());
+    // Start the server
+    server.begin();
+    Serial.println("Server started");
+
+    // Print the IP and MAC address
+    Serial.print("IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.print("MAC: ");
+    Serial.println(WiFi.macAddress());
 }
 
 void loop() {
+    if (blinkLed) {
+        if (millis() - lastTime > 100) {
+            isLedOn = !isLedOn;
+            digitalWrite(LED, isLedOn);
+            lastTime = millis();
+        }
+    }
     // Handle REST calls
     WiFiClient client = server.available();
     if (!client) return;
     while(!client.available()) delay(1);
     rest.handle(client);
+
 }
 
 // API Functions
 int ledOn(String command) {
-  Serial.print("LEDON");
-  digitalWrite(LED, HIGH);
-  return 1;
+    Serial.println("LEDON");
+    blinkLed = true;
+    lastTime = millis();
+    isLedOn = true;
+    digitalWrite(LED, HIGH);
+    return 1;
 }
 
 int ledOff(String command) {
-  Serial.print("LEDOFF");
-  digitalWrite(LED, LOW);
-  return 1;
+    Serial.println("LEDOFF");
+    blinkLed = false;
+    digitalWrite(LED, LOW);
+    return 1;
 }
 
 int motorOn(String command) {
-    Serial.print("MOTORON");
+    Serial.println("MOTORON");
     digitalWrite(MOTOR, HIGH);
     return 1;
 }
 
 int motorOff(String command) {
-    Serial.print("MOTOROFF");
+    Serial.println("MOTOROFF");
     digitalWrite(MOTOR, LOW);
     return 1;
+}
+
+int battery(String command) {
+    int val = analogRead(A0);
+    Serial.print("BATTERY ");
+    Serial.println(val);
+    return val;
+    
 }
