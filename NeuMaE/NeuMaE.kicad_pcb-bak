@@ -6,7 +6,7 @@
     (tracks 172)
     (zones 0)
     (modules 20)
-    (nets 28)
+    (nets 29)
   )
 
   (page A4)
@@ -85,7 +85,7 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
       (outputdirectory ""))
   )
@@ -118,6 +118,7 @@
   (net 25 "Net-(J5-Pad3)")
   (net 26 /PIN4)
   (net 27 /PIN5)
+  (net 28 "Net-(U1-PadHEAT)")
 
   (net_class Default "This is the default net class."
     (clearance 0.3)
@@ -146,6 +147,7 @@
     (add_net "Net-(R4-Pad2)")
     (add_net "Net-(R5-Pad2)")
     (add_net "Net-(R6-Pad2)")
+    (add_net "Net-(U1-PadHEAT)")
     (add_net "Net-(U2-Pad10)")
     (add_net "Net-(U2-Pad11)")
     (add_net "Net-(U2-Pad12)")
@@ -188,7 +190,8 @@
       (net 5 +3V3))
     (pad 2 thru_hole oval (at 2.54 11.43 270) (size 2.032 4.064) (drill 1.27) (layers *.Cu *.Mask)
       (net 2 GND))
-    (pad HEAT thru_hole circle (at 0 -6.35 270) (size 7.62 7.62) (drill 3.2004) (layers *.Cu *.Mask))
+    (pad HEAT thru_hole circle (at 0 -6.35 270) (size 7.62 7.62) (drill 3.2004) (layers *.Cu *.Mask)
+      (net 28 "Net-(U1-PadHEAT)"))
   )
 
   (module Button_Switch_THT:SW_PUSH_6mm (layer F.Cu) (tedit 5A02FE31) (tstamp 5E5F5D47)
@@ -1286,7 +1289,7 @@
   (segment (start 72.136 32.526502) (end 62.487501 42.175001) (width 0.75) (layer F.Cu) (net 27))
   (segment (start 72.136 28.448) (end 72.136 32.526502) (width 0.75) (layer F.Cu) (net 27))
 
-  (zone (net 2) (net_name GND) (layer B.Cu) (tstamp 5E600670) (hatch edge 0.508)
+  (zone (net 2) (net_name GND) (layer B.Cu) (tstamp 5E5F1CD0) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
