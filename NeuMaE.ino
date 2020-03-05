@@ -10,10 +10,6 @@
 // Create aREST instance
 aREST rest = aREST();
 
-bool blinkLed = false;
-bool isLedOn = false;
-unsigned long lastTime;
-
 // WiFi parameters
 const char* ssid = "GTother";
 const char* password = "GeorgeP@1927";
@@ -32,8 +28,10 @@ int motorOff(String command);
 int battery(String command);
 
 void setup(void) {
+    ESP.wdtDisable();
     // Start Serial
     Serial.begin(115200);
+    Serial.println("HELLAOOOOOO");
 
     // Function to be exposed
     rest.function("ledOn",ledOn);
@@ -71,13 +69,6 @@ void setup(void) {
 }
 
 void loop() {
-    if (blinkLed) {
-        if (millis() - lastTime > 100) {
-            isLedOn = !isLedOn;
-            digitalWrite(LED, isLedOn);
-            lastTime = millis();
-        }
-    }
     // Handle REST calls
     WiFiClient client = server.available();
     if (!client) return;
@@ -89,16 +80,13 @@ void loop() {
 // API Functions
 int ledOn(String command) {
     Serial.println("LEDON");
-    blinkLed = true;
-    lastTime = millis();
-    isLedOn = true;
-    digitalWrite(LED, HIGH);
+    tone(LED, 5);
     return 1;
 }
 
 int ledOff(String command) {
     Serial.println("LEDOFF");
-    blinkLed = false;
+    noTone(LED);
     digitalWrite(LED, LOW);
     return 1;
 }
