@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /Users/willbuxton/NeuMaE/NeuMaE/NeuMaE.sch)
-    (date "Wednesday, 04 March 2020 at 15:22:04")
+    (date "Thursday, 05 March 2020 at 11:04:51")
     (tool "Eeschema (5.0.1-3-g963ef8bb5)")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -115,7 +115,7 @@
       (tstamp 5E5F5FCA))
     (comp (ref C1)
       (value 100nF)
-      (footprint Capacitor_THT:C_Rect_L4.6mm_W2.0mm_P2.50mm_MKS02_FKP02)
+      (footprint Capacitor_THT:C_Rect_L7.2mm_W2.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2)
       (datasheet ~)
       (libsource (lib Device) (part C_Small) (description "Unpolarized capacitor, small symbol"))
       (sheetpath (names /) (tstamps /))
